@@ -14,6 +14,7 @@ class Product:
         self.price = price
         self.quantity = quantity
         self.active = True
+        self.promotion = None  # promotion applied to the product
 
     def get_quantity(self) -> float:
         # returns the current quantity of the product
@@ -39,9 +40,16 @@ class Product:
         # deactivates the product
         self.active = False
 
+    def set_promotion(self, promotion):
+        # sets a promotion for the product
+        self.promotion = promotion
+
     def show(self) -> str:
-        # returns a string representation of the product
-        return f"{self.name}, price: {self.price}, quantity: {self.quantity}"
+        # returns a string representation of the product, including its promotion
+        promo_text = f" ({self.promotion.name})" if self.promotion else ""
+        return (
+            f"{self.name}, price: {self.price}, quantity: {self.quantity}{promo_text}"
+        )
 
     def buy(self, quantity: int) -> float:
         # handles the purchase of a given quantity
@@ -49,7 +57,12 @@ class Product:
             raise ValueError("quantity to buy must be greater than zero.")
         if quantity > self.quantity:
             raise ValueError("not enough stock to fulfill the purchase.")
-        total_price = self.price * quantity
+
+        if self.promotion:
+            total_price = self.promotion.apply_promotion(self, quantity)
+        else:
+            total_price = self.price * quantity
+
         self.set_quantity(self.quantity - quantity)
         return total_price
 
