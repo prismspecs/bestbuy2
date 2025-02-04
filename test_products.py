@@ -46,3 +46,7 @@ def test_buying_larger_quantity_than_exists_raises_exception():
     product = Product("MacBook Air M2", price=1450, quantity=10)
     with pytest.raises(ValueError, match="not enough stock to fulfill the purchase."):
         product.buy(15)
+
+
+if __name__ == "__main__":
+    pytest.main()
