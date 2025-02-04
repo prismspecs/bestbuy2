@@ -63,7 +63,7 @@ def handle_choice(choice, store_object):
         # option to list all products in the store
         print("\nproducts in the store:")
         for product in store_object.get_all_products():
-            print(product.show())
+            print(product)
     elif choice == "2":
         # option to show the total quantity of all products
         print(
