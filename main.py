@@ -15,70 +15,65 @@ best_buy = store.Store(product_list)
 def handle_order(store_object):
     """handles placing an order in the store."""
     # explain to the user how to enter an order
-    print(
-        "\nenter your order. type the product name and quantity separated by a comma."
-    )
-    print("example: macbook air m2, 1")
-    print("type 'done' when you are finished.")
+    print("\nEnter your order using the product number and quantity.")
+    print("Example: 1, 2 (for 2 units of product #1)")
+    print("Type 'done' when you are finished.")
 
     # list to hold the user's order
     shopping_list = []
     while True:
         # get input from the user
-        order_input = input("order item (or 'done'): ").strip()
+        order_input = input("Order item (or 'done'): ").strip()
         if order_input.lower() == "done":
             # stop taking input when the user types 'done'
             break
         try:
-            # split input into product name and quantity
-            name, quantity = order_input.split(",", 1)
-            name = name.strip()
+            # split input into product number and quantity
+            product_num, quantity = order_input.split(",", 1)
+            product_num = int(product_num.strip())
             quantity = int(quantity.strip())
 
-            # find the product in the store's active products
-            product = next(
-                (p for p in store_object.get_all_products() if p.name == name), None
-            )
-            if product:
+            # get all active products
+            active_products = store_object.get_all_products()
+            if 1 <= product_num <= len(active_products):
+                product = active_products[product_num - 1]
                 shopping_list.append((product, quantity))
             else:
-                print(f"product '{name}' not found. please check the product name.")
+                print(f"Product number '{product_num}' not found. Please check the product number.")
         except ValueError:
             # handle invalid input format
-            print("invalid input. please enter in the format: product_name, quantity.")
+            print("Invalid input. Please enter in the format: product_number, quantity.")
 
     # process the order if the shopping list is not empty
     if shopping_list:
         try:
             total_price = store_object.order(shopping_list)
-            print(f"\norder placed successfully! total price: {total_price} dollars.")
+            print(f"\nOrder placed successfully! Total price: ${total_price:.2f}")
         except ValueError as e:
             # handle errors during the order
-            print(f"order error: {e}")
+            print(f"Order error: {e}")
 
 
 def handle_choice(choice, store_object):
     """processes the user's menu choice."""
     if choice == "1":
         # option to list all products in the store
-        print("\nproducts in the store:")
-        for product in store_object.get_all_products():
-            print(product)
+        print("\nProducts in the store:")
+        for idx, product in enumerate(store_object.get_all_products(), 1):
+            print(f"{idx}. {product}")
     elif choice == "2":
         # option to show the total quantity of all products
-        print(
-            f"\ntotal quantity of items in store: {store_object.get_total_quantity()}"
-        )
+        print(f"\nTotal quantity of items in store: {store_object.get_total_quantity()}")
     elif choice == "3":
         # option to make an order
         handle_order(store_object)
     elif choice == "4":
         # option to quit the program
-        print("thank you for visiting the store. goodbye!")
+        print("Thank you for visiting the store. Goodbye!")
         return False
     else:
         # handle invalid menu choices
-        print("invalid choice. please enter a number between 1 and 4.")
+        print("Invalid choice. Please enter a number between 1 and 4.")
     return True
 
 
@@ -86,14 +81,14 @@ def start(store_object):
     """starts the user interface loop."""
     while True:
         # display the menu options to the user
-        print("\nwelcome to the store! please choose an option:")
-        print("1. list all products in store")
-        print("2. show total amount in store")
-        print("3. make an order")
-        print("4. quit")
+        print("\nWelcome to the store! Please choose an option:")
+        print("1. List all products in store")
+        print("2. Show total amount in store")
+        print("3. Make an order")
+        print("4. Quit")
 
         # get the user's choice and process it
-        if not handle_choice(input("enter your choice: "), store_object):
+        if not handle_choice(input("Enter your choice: "), store_object):
             break
 
 

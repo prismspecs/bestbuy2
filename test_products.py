@@ -29,7 +29,7 @@ def test_create_product_invalid_details():
 # test that when a product reaches 0 quantity, it becomes inactive
 def test_product_becomes_inactive_at_zero_quantity():
     product = Product("MacBook Air M2", price=1450, quantity=1)
-    product.set_quantity(0)
+    product.quantity = 0
     assert product.is_active() is False
 
 

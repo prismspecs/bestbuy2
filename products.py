@@ -54,6 +54,10 @@ class Product:
     def set_promotion(self, promotion):
         self.promotion = promotion
 
+    def get_quantity(self) -> int:
+        """Returns the current quantity of the product."""
+        return self._quantity
+
     def buy(self, quantity: int) -> float:
         if quantity <= 0:
             raise ValueError("quantity to buy must be greater than zero.")
@@ -70,9 +74,7 @@ class Product:
 
     def __str__(self):
         promo_text = f" ({self.promotion.name})" if self.promotion else ""
-        return (
-            f"{self.name}, Price: ${self.price}, Quantity: {self.quantity}{promo_text}"
-        )
+        return f"{self.name}, Price: ${self.price:.2f}, Quantity: {self.quantity}{promo_text}"
 
     def __gt__(self, other):
         return self.price > other.price
